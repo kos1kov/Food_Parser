@@ -11,6 +11,7 @@ class PetsFood
 
   def perform
     array_with_products = Scraper.new(@page_link).perform
+    array_with_products.uniq! { |item| item[:Name] }
     HashToCsv.perform(array_with_products, @file)
   end
 end

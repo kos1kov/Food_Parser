@@ -40,7 +40,7 @@ class Scraper
   def collect_product_info(links)
     links.each do |link|
       doc = open_page(link[:href])
-      array << product_info(doc)
+      @array += product_info(doc)
     end
   end
 
@@ -61,17 +61,19 @@ class Scraper
   end
 
   def product_info(doc)
-    item = {}
+    all_items = []
     size, price = price_and_size(doc)
     name = product_name(doc)
     image = image_link(doc)
     size.each_index do |index|
+      item = {}
       item[:Name] = "#{name} - #{size[index].text}"
       item[:Price] = price[index].text.gsub(/[^\d,\.]/, '')
       item[:Image] = image
+      puts item
+      all_items << item
     end
-    puts item
-    item
+    all_items
   end
 
   def price_and_size(doc)
